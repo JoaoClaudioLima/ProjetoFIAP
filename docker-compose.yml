@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"  # Expose MongoDB's default port
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "jclaudiobl"
+      MONGO_INITDB_ROOT_PASSWORD: "3OsiGsX9Sfjg42FQ"
+      MONGO_INITDB_DATABASE: test_db
+    networks:
+      - app_network
+
+  python-app:
+    build: .
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/
+    depends_on:
+      - mongo
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge

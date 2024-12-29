@@ -8,11 +8,11 @@ import alembic.config
 
 
 # Configuring latest database version via alembic
-alembicArgs = [
-    '--raiseerr',
-    'upgrade', 'head',
-]
-alembic.config.main(argv=alembicArgs)
+# alembicArgs = [
+#     '--raiseerr',
+#     'upgrade', 'head',
+# ]
+# alembic.config.main(argv=alembicArgs)
 
 app = FastAPI(
     title="Temp",

@@ -1,13 +1,22 @@
-
+import alembic
 import uvicorn
 from fastapi import FastAPI
 
-from ProjetoFIAP.src.controller import VERSION
-from ProjetoFIAP.src.controller.routes import router
+from src.controller.routes import router
+from src.settings import Settings
+import alembic.config
+
+
+# Configuring latest database version via alembic
+alembicArgs = [
+    '--raiseerr',
+    'upgrade', 'head',
+]
+alembic.config.main(argv=alembicArgs)
 
 app = FastAPI(
     title="Temp",
-    version=VERSION
+    version=Settings.VERSION,
 )
 
 api_prefix = "/api/v1"

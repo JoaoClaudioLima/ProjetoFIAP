@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from ProjetoFIAP.src.controller import VERSION
+from src.settings import Settings
 
 router = APIRouter()
 
@@ -11,7 +11,7 @@ async def health_check():
     Check de saúde do serviço.
     '''
     data = {
-        "version": VERSION,
+        "version": Settings.VERSION,
         "message": "Alive and kicking!"
     }
     return data

@@ -1,11 +1,8 @@
-import alembic
 import uvicorn
 from fastapi import FastAPI
 
 from src.controller.routes import router
 from src.settings import Settings
-import alembic.config
-
 
 # Configuring latest database version via alembic
 # alembicArgs = [
@@ -21,7 +18,8 @@ app = FastAPI(
 
 api_prefix = "/api/v1"
 
-app.include_router(router=router, prefix=api_prefix, tags=["users"])
+app.include_router(router=router, prefix=api_prefix, tags=["FIAP"])
+
 
 if __name__ == "__main__":
     uvicorn.run(

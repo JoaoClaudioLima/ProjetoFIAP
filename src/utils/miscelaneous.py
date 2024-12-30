@@ -1,13 +1,13 @@
-from faker import Faker
+import bcrypt
 
 
-def generate_fake_user():
-    fake = Faker()
-    name = fake.name()
-    first_name = name.split()[0].lower()
-    last_name = name.split()[1].lower()
-    username = f"{first_name[0]}.{last_name}"
-    email = f"{first_name}.{last_name}@fakemail.com"
-    password = fake.password()
+def hash_password(password: str) -> str:
+    # Gera um salt e faz o hash da senha
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed_password.decode('utf-8')
 
-    return username, email, name, password
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    # Verifica se a senha fornecida corresponde ao hash armazenado
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))

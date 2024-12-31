@@ -1,7 +1,7 @@
 from fastapi import Depends, APIRouter
 from sqlalchemy.orm import Session
 
-from src.model.models import TaskStatus
+from src.model.database import TaskStatus
 from src.utils.database import get_from_db, get_db
 
 task_status_router = APIRouter()

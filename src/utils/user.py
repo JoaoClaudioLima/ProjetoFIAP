@@ -1,11 +1,11 @@
+from datetime import datetime
 from typing import Union
 
 from faker import Faker
-from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from src.model import models
-from src.model.models import UserInput
+from src.model.database import User
+from src.model.schemas import UserInput, UserUpdateInput
 from src.utils.miscelaneous import hash_password
 
 
@@ -21,41 +21,26 @@ def generate_fake_user():
     return username, email, name, hashed_password
 
 
-def get_user_from_db(
+def get_db_user(
         db: Session,
         user_id: Union[int, None] = None,
-        email: Union[str, None] = None,
-        username: Union[str, None] = None,
         skip: int = 0,
         limit: int = 10
     ):
 
-    model = models.User
-
-    if email and username:
-        if db.query(model).filter(model.email == email and model.deleted_at.is_(None)).all():
-            return True, "Email already registered"
-        elif db.query(model).filter(model.username == username and model.deleted_at.is_(None)).all():
-            return True, "Username already registered"
-        return False, "OK"
+    model = User
 
     if not user_id:
-        return db.query(model).filter(model.deleted_at.is_(None)).offset(skip).limit(limit).all(), "User not found"
+        return db.query(model).filter(model.deleted_at.is_(None)).offset(skip).limit(limit).all()
 
-    return db.query(model).filter(model.id == user_id).all(), None
-
-
-def validate_user_input(user: UserInput, db: Session):
-    db_user, message = get_user_from_db(db, email=user.email, username=user.username)
-    if db_user:
-        raise HTTPException(status_code=400, detail=message)
+    return db.query(model).filter(model.id == user_id).all()
 
 
-def create_new_user(user: UserInput, db: Session):
+def create_new_db_user(user: UserInput, db: Session):
 
     hashed_password = hash_password(user.password)
 
-    db_user = models.User(
+    db_user = User(
         username=user.username,
         email=user.email,
         full_name=user.full_name,
@@ -67,6 +52,23 @@ def create_new_user(user: UserInput, db: Session):
     return db_user
 
 
-def delete_user():
+def delete_db_user(db: Session, user: UserUpdateInput):
+    model = User
+    task = db.query(model).filter(model.email == user.to_update.email,model.deleted_at.is_(None)).first()
+    if task:
+        task.deleted_at = datetime.now()
+        db.commit()
+        db.refresh(task)
+    return task
 
-    pass
+
+def update_db_user(db: Session, user: UserUpdateInput):
+    model = User
+    task = db.query(model).filter(model.email == user.to_update.email, model.deleted_at.is_(None)).first()
+    if task:
+        task.password = hash_password(user.to_update.password) if user.to_update.password else task.password
+        task.full_name = user.full_name if user.full_name else task.full_name
+        task.username = user.username if user.username else task.username
+        db.commit()
+        db.refresh(task)
+    return task

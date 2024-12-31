@@ -4,7 +4,7 @@ from typing import Union
 from faker import Faker
 from sqlalchemy.orm import Session
 
-from src.model.models import Task
+from src.model.database import Task
 
 
 def generate_fake_task(iteration, users_ammount: int = 5, status_ammount: int = 3):

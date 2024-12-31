@@ -3,7 +3,7 @@ from typing import Optional
 from fastapi import Depends, Query, APIRouter
 from sqlalchemy.orm import Session
 
-from src.model.models import Task
+from src.model.database import Task
 from src.utils.database import get_from_db, get_db
 from src.utils.task import get_task_from_db
 

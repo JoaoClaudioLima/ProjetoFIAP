@@ -1,6 +1,6 @@
-from pydantic import BaseModel
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, func, Boolean
 from sqlalchemy.orm import relationship
+
 from src.controller.database import Base
 
 
@@ -40,11 +40,3 @@ class User(Base):
     deleted_at = Column(DateTime, server_default=None)
 
     tasks = relationship("Task", back_populates="user")
-
-
-class UserInput(BaseModel):
-    username: str
-    email: str
-    full_name: str
-    password: str
-    # TODO criar validação de email e password

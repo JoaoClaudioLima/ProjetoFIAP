@@ -65,10 +65,22 @@ def delete_db_user(db: Session, user: UserUpdateInput):
 def update_db_user(db: Session, user: UserUpdateInput):
     model = User
     task = db.query(model).filter(model.email == user.to_update.email, model.deleted_at.is_(None)).first()
-    if task:
-        task.password = hash_password(user.to_update.password) if user.to_update.password else task.password
-        task.full_name = user.full_name if user.full_name else task.full_name
-        task.username = user.username if user.username else task.username
-        db.commit()
-        db.refresh(task)
+    if not task:
+        return
+
+    if new_password := user.to_update.password:
+        task.hashed_password = hash_password(new_password)
+
+    if new_full_name := user.to_update.full_name:
+        task.full_name = new_full_name
+
+    if new_username := user.to_update.username:
+        task.username = new_username
+
+    if not any([new_password, new_full_name, new_username]):
+        return
+
+    db.commit()
+    db.refresh(task)
+
     return task

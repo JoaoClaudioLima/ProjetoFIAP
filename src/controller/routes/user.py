@@ -12,8 +12,6 @@ user_router = APIRouter()
 
 @user_router.post("/user/", response_model=None, status_code=201)
 def create_user(user: UserInput, db: Session = Depends(get_db)):
-    # if check_email_exists(db, user.email):
-    #     raise HTTPException(status_code=400, detail="Email already registered")
     create_new_db_user(user, db)
     return "Created"
 
@@ -40,9 +38,15 @@ def delete_user(user: UserUpdateInput, db: Session = Depends(get_db)):
 
 @user_router.put("/user/", response_model=None)
 def update_user(user: UserUpdateInput, db: Session = Depends(get_db)):
+    if not check_email_exists(db, user.authentication.email):
+        raise HTTPException(status_code=400, detail="Authenticate user not found")
 
+    if user.authentication.email != user.to_update.email:
+        if not check_email_exists(db, user.to_update.email):
+            raise HTTPException(status_code=400, detail="Update user not found")
 
     authenticate_user(db, user.authentication.email, user.to_update.email, user.authentication.password)
+
     task = update_db_user(db=db, user=user)
 
     if not task:

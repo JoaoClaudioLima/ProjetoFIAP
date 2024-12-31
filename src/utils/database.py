@@ -16,9 +16,7 @@ def get_db():
 
 def check_email_exists(db: Session, email: str):
     model = User
-    if db.query(model).filter(model.email == email, model.deleted_at.is_(None)).first():
-        return True
-    return False
+    return db.query(model).filter(model.email == email, model.deleted_at.is_(None)).first() is not None
 
 
 def get_from_db(model, db: Session, skip: int = 0, limit: int = 10):
@@ -27,10 +25,7 @@ def get_from_db(model, db: Session, skip: int = 0, limit: int = 10):
 
 def is_user_admin(db: Session, email: str):
     model = User
-    task = db.query(model).filter(model.email == email, model.deleted_at.is_(None), model.is_admin.is_(True)).first()
-    if not task:
-        raise HTTPException(status_code=404, detail="Only admins can perform this action")
-    return task
+    return db.query(model).filter(model.email == email, model.deleted_at.is_(None), model.is_admin.is_(True)).first() is not None
 
 
 def check_email(authenticate_email: str, to_update_email: str) -> bool:
@@ -74,5 +69,6 @@ def validate_email_availability(email: str):
 def authenticate_user(db: Session, authentication_email: str, to_update_email: str, password: str):
     if not check_authentication(db, email=authentication_email, password=password):
         raise HTTPException(status_code=400, detail="Incorrect email or password")
-    if not can_user_update(db, authenticate_email=authentication_email, to_update_email=to_update_email):
-        raise HTTPException(status_code=400, detail="User can only update their profile")
+
+    if not (is_user_admin(db, authentication_email) or check_email(authentication_email, to_update_email)):
+        raise HTTPException(status_code=400, detail="Only admins can update other users account")

@@ -3,20 +3,20 @@ from typing import Optional
 from fastapi import Depends, HTTPException, Query, APIRouter
 from sqlalchemy.orm import Session
 
-from src.model.schemas import UserInput, UserUpdateInput
+from src.model.user_schemas import UserInput, UserUpdateInput
 from src.utils.database import get_db, authenticate_user, check_email_exists
 from src.utils.user import create_new_db_user, get_db_user, delete_db_user, update_db_user
 
-user_router = APIRouter()
+users_router = APIRouter()
 
 
-@user_router.post("/user/", response_model=None, status_code=201)
+@users_router.post("/user/", response_model=None, status_code=201)
 def create_user(user: UserInput, db: Session = Depends(get_db)):
     create_new_db_user(user, db)
     return "Created"
 
 
-@user_router.get("/user/", response_model=None)
+@users_router.get("/user/", response_model=None)
 def read_user(user_id: Optional[int] = Query(None, description="The ID of the user to retrieve"), db: Session = Depends(get_db)):
     task = get_db_user(db, user_id=user_id)
     if not task:
@@ -24,7 +24,7 @@ def read_user(user_id: Optional[int] = Query(None, description="The ID of the us
     return task
 
 
-@user_router.delete("/user/", response_model=None, status_code=200)
+@users_router.delete("/user/", response_model=None, status_code=200)
 def delete_user(user: UserUpdateInput, db: Session = Depends(get_db)):
     authenticate_user(db, user.authentication.email, user.to_update.email, user.authentication.password)
     task = delete_db_user(db, user=user)
@@ -36,7 +36,7 @@ def delete_user(user: UserUpdateInput, db: Session = Depends(get_db)):
     return "User deleted successfully"
 
 
-@user_router.put("/user/", response_model=None)
+@users_router.put("/user/", response_model=None)
 def update_user(user: UserUpdateInput, db: Session = Depends(get_db)):
     if not check_email_exists(db, user.authentication.email):
         raise HTTPException(status_code=400, detail="Authenticate user not found")

@@ -5,7 +5,7 @@ from faker import Faker
 from sqlalchemy.orm import Session
 
 from src.model.database import User
-from src.model.schemas import UserInput, UserUpdateInput
+from src.model.user_schemas import UserInput, UserUpdateInput
 from src.utils.miscelaneous import hash_password
 
 

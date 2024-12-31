@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, StrictStr
 from pydantic import field_validator
 
 from src.utils.database import *
@@ -6,10 +6,13 @@ from src.utils.database import *
 
 # CREATE class
 class UserInput(BaseModel):
-    username: str
-    email: str
-    full_name: str
-    password: str
+    '''
+    Class responsible for handling user input.
+    '''
+    username: StrictStr = Field(default=None, description="User username", example="joao.lima")
+    email: StrictStr = Field(default=None, description="User email", example="j.lima@fakemail.com")
+    full_name: StrictStr = Field(default=None, description="User full name", example="João Lima")
+    password: StrictStr = Field(default=None, description="User password", example="joao_lima_FAKE_password123!")
 
     @field_validator("email")
     def email_must_be_unique(cls, v):
@@ -28,7 +31,7 @@ class UserInput(BaseModel):
         return v
 
 
-# DELETE and PATCH classes
+# DELETE and PUT classes
 class UserAuthentication(BaseModel):
     email: str
     password: str
@@ -46,7 +49,7 @@ class UserUpdateInput(BaseModel):
     to_update: UserUpdate
 
 
-# PUT classes
+# PATCH classes
 class UserUpdateFull(BaseModel):
     username: str
     email: str

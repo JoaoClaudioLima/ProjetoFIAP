@@ -4,7 +4,7 @@ from typing import Union
 from faker import Faker
 from sqlalchemy.orm import Session
 
-from src.model.database import Task
+from src.model.database import Tasks
 
 
 def generate_fake_task(iteration, users_ammount: int = 5, status_ammount: int = 3):
@@ -18,14 +18,14 @@ def generate_fake_task(iteration, users_ammount: int = 5, status_ammount: int = 
 
 def get_task_from_db(
         db: Session,
-        user_id: Union[int, None],
-        task_id: Union[int, None],
-        status_id: Union[int, None],
+        user_id: Union[int, None] = None,
+        task_id: Union[int, None] = None,
+        status_id: Union[int, None] = None,
         skip: int = 0,
         limit: int = 10
     ):
-    model = Task
-    query = db.query(Task)
+    model = Tasks
+    query = db.query(Tasks)
 
     if user_id is not None:
         query = query.filter(model.user_id == user_id)

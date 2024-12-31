@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from src.controller.database import Base
 
 
-class Task(Base):
+class Tasks(Base):
     __tablename__ = "tasks"
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
@@ -24,7 +24,7 @@ class TaskStatus(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
 
-    tasks = relationship("Task", back_populates="status")
+    tasks = relationship("Tasks", back_populates="status")
 
 
 class User(Base):
@@ -39,4 +39,4 @@ class User(Base):
     updated_at = Column(DateTime, server_default=func.now())
     deleted_at = Column(DateTime, server_default=None)
 
-    tasks = relationship("Task", back_populates="user")
+    tasks = relationship("Tasks", back_populates="user")

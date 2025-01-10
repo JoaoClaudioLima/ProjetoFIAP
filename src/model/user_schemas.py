@@ -27,7 +27,7 @@ class UserInput(BaseModel):
     @field_validator('password')
     def password_must_be_strong(cls, v):
         if len(v) < 8:
-            raise ValueError('Password must be at least 8 characters long')
+            raise HTTPException(400, 'A senha deve ter mais de 8 caracteres')
         return v
 
 

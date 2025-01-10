@@ -12,8 +12,11 @@ from src.settings import Settings
 # alembic.config.main(argv=alembicArgs)
 
 app = FastAPI(
-    title="Temp",
+    title="API projeto do board de tarefas - FIAP",
+    description="API para o Board de Tarefa -> Melhorar descrição",
     version=Settings.VERSION,
+    redoc_url=f"/apis/partner-redoc",
+    openapi_url=f"/apis/partner/openapi.json",
 )
 
 api_prefix = "/api/v1"

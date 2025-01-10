@@ -1,15 +1,16 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Union
 
 from faker import Faker
 from sqlalchemy.orm import Session
 
 from src.model.database import User
-from src.model.user_schemas import UserInput, UserUpdateInput
+from src.model.user_schemas import UserInput, UserUpdateInput, UserAuthentication
 from src.utils.miscelaneous import hash_password
+from src.utils.task import db_remove_user_from_tasks
 
 
-def generate_fake_user():
+def db_generate_fake_user():
     fake = Faker()
     name = fake.name()
     first_name = name.split()[0].lower()
@@ -21,7 +22,7 @@ def generate_fake_user():
     return username, email, name, hashed_password
 
 
-def get_db_user(
+def db_read_user(
         db: Session,
         user_id: Union[int, None] = None,
         skip: int = 0,
@@ -36,33 +37,41 @@ def get_db_user(
     return db.query(model).filter(model.id == user_id).all()
 
 
-def create_new_db_user(user: UserInput, db: Session):
+def db_login_user(user: UserAuthentication, db: Session):
+    hashed_password = hash_password(user.password)
+    return user.verify_password(hashed_password)
+
+
+def db_create_user(user: UserInput, db: Session):
 
     hashed_password = hash_password(user.password)
 
-    db_user = User(
+    new_user = User(
         username=user.username,
         email=user.email,
         full_name=user.full_name,
-        hashed_password=hashed_password,  # TODO Validar se será criptografado na camada de back ou front. Estou fazendo aqui no momento.
+        hashed_password=hashed_password,
     )
-    db.add(db_user)
+    db.add(new_user)
     db.commit()
-    db.refresh(db_user)
-    return db_user
+    db.refresh(new_user)
+    return new_user
 
 
-def delete_db_user(db: Session, user: UserUpdateInput):
+def db_delete_user(db: Session, user: UserUpdateInput):
     model = User
-    task = db.query(model).filter(model.email == user.to_update.email,model.deleted_at.is_(None)).first()
+    task = db.query(model).filter(model.email == user.to_update.email, model.deleted_at.is_(None)).first()
     if task:
-        task.deleted_at = datetime.now()
+        time = datetime.utcnow()
+        task.updated_at, task.deleted_at = time, time
         db.commit()
         db.refresh(task)
+        db_remove_user_from_tasks(db, str(task.id))
+
     return task
 
 
-def update_db_user(db: Session, user: UserUpdateInput):
+def db_update_user(db: Session, user: UserUpdateInput):
     model = User
     task = db.query(model).filter(model.email == user.to_update.email, model.deleted_at.is_(None)).first()
     if not task:
@@ -80,6 +89,7 @@ def update_db_user(db: Session, user: UserUpdateInput):
     if not any([new_password, new_full_name, new_username]):
         return
 
+    task.updated_at = datetime.utcnow()
     db.commit()
     db.refresh(task)
 

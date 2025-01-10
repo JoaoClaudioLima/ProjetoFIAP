@@ -11,7 +11,7 @@ from src.utils.user import db_update_user, db_delete_user, db_read_user, db_crea
 users_router = APIRouter()
 
 
-@users_router.post("/login/", response_model=None, status_code=200)
+@users_router.post("/user/login/", response_model=None, status_code=200)
 def login_user(user: UserAuthentication, db: Session = Depends(get_db)):
     authenticate_user(db, user.email, user.password)
     return "OK"
@@ -36,8 +36,6 @@ def delete_user(user: UserUpdateInput, db: Session = Depends(get_db)):
     authenticate_user(db, user.authentication.email, user.authentication.password)
     check_user_privileges(db, user.authentication.email, user.to_update.email)
     task = db_delete_user(db, user=user)
-
-    #  TODO update tarefas que este usuário tinha para sem usuário
 
     if not task:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")

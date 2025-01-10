@@ -7,11 +7,8 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Install pymongo (MongoDB driver for Python)
-RUN pip install --no-cache-dir pymongo
-
 # Install any other dependencies you may have in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements.txt
 
 # Command to run on container start
 CMD ["python", "app.py"]

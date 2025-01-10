@@ -1,5 +1,5 @@
-import logging
-from datetime import datetime, timezone
+from datetime import datetime
+from fastapi import HTTPException
 from random import randint
 from typing import Union
 
@@ -7,7 +7,8 @@ from faker import Faker
 from sqlalchemy.orm import Session
 
 from src.model.database import Task
-from src.model.task_schemas import TaskInput
+from src.model.task_schemas import TaskInput, TaskUpdateInput
+from src.utils.database import check_user_exists, check_task_status_exists
 
 
 def db_create_fake_task(iteration, users_ammount: int = 5, status_ammount: int = 3):
@@ -40,18 +41,28 @@ def db_read_task(
     return query.all()
 
 
-def db_create_task(task: TaskInput, db: Session):
+def db_validate_task_input(task_input: Union[TaskInput, TaskUpdateInput], db: Session):
+    if task_input.user_id and not check_user_exists(db, str(task_input.user_id)):
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
 
-    new_task = Task(
-        title=task.title,
-        description=task.description,
-        status_id=task.status_id if task.status_id else 1,
-        user_id=task.user_id,
+    if task_input.status_id and not check_task_status_exists(db, str(task_input.status_id)):
+        raise HTTPException(status_code=404, detail="Status da tarefa inválido")
+
+
+def db_create_task(task_input: TaskInput, db: Session):
+
+    db_validate_task_input(task_input, db)
+
+    task = Task(
+        title=task_input.title,
+        description=task_input.description,
+        status_id=task_input.status_id if task_input.status_id else 1,
+        user_id=task_input.user_id,
     )
-    db.add(new_task)
+    db.add(task)
     db.commit()
-    db.refresh(new_task)
-    return new_task
+    db.refresh(task)
+    return task
 
 
 def db_delete_task(db: Session, task_id: int):
@@ -65,7 +76,10 @@ def db_delete_task(db: Session, task_id: int):
     return task
 
 
-def db_update_task(db: Session, task_input: TaskInput, task_id: str, remove_user: bool):
+def db_update_task(db: Session, task_input: TaskUpdateInput, task_id: str, remove_user: bool):
+
+    db_validate_task_input(task_input, db)
+
     model = Task
     task = db.query(model).filter(model.id == task_id, model.deleted_at.is_(None)).first()
     if not task:

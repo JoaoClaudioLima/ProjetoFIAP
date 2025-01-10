@@ -3,7 +3,7 @@ from typing import Optional
 from fastapi import Depends, Query, APIRouter, HTTPException
 from sqlalchemy.orm import Session
 
-from src.model.task_schemas import TaskInput
+from src.model.task_schemas import TaskInput, TaskUpdateInput
 from src.utils.database import get_db
 from src.utils.task import db_create_task, db_read_task, db_delete_task, db_update_task
 from src.utils.user import db_update_user
@@ -32,7 +32,7 @@ def create_task(task: TaskInput, db: Session = Depends(get_db)):
 
     #  TODO validar erro de cadastro de status/user que não existem
 
-    return "Created"
+    return "Tarefa criada"
 
 
 @tasks_router.delete("/tasks/", response_model=None, status_code=200)
@@ -47,7 +47,7 @@ def delete_task(
 
 @tasks_router.put("/tasks/", response_model=None, status_code=200)
 def update_task(
-        task: TaskInput,
+        task: TaskUpdateInput,
         task_id: Optional[str] = Query(None, description="The ID of the task to be updated"),
         remove_user: Optional[bool] = Query(False, description="Sets task user_id to None"),
         db: Session = Depends(get_db)):

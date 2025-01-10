@@ -1,15 +1,15 @@
+from alembic import command
+from alembic.config import Config
 import uvicorn
 from fastapi import FastAPI
 
 from src.controller.routes import router
 from src.settings import Settings
 
-# Configuring latest database version via alembic
-# alembicArgs = [
-#     '--raiseerr',
-#     'upgrade', 'head',
-# ]
-# alembic.config.main(argv=alembicArgs)
+
+# Executa as migrações do Alembic
+alembic_cfg = Config("alembic.ini")
+command.upgrade(alembic_cfg, "head")
 
 app = FastAPI(
     title="API projeto do board de tarefas - FIAP",

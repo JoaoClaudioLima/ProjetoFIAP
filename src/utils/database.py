@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from src.controller.database import SessionLocal
-from src.model.database import User
+from src.model.database import User, TaskStatus
 from src.utils.miscelaneous import verify_password
 
 
@@ -17,6 +17,16 @@ def get_db():
 def check_email_exists(db: Session, email: str):
     model = User
     return db.query(model).filter(model.email == email, model.deleted_at.is_(None)).first() is not None
+
+
+def check_user_exists(db: Session, user_id: str):
+    model = User
+    return db.query(model).filter(model.id == user_id, model.deleted_at.is_(None)).first() is not None
+
+
+def check_task_status_exists(db: Session, task_status_id: str):
+    model = TaskStatus
+    return db.query(model).filter(model.id == task_status_id).first() is not None
 
 
 def check_username_availability(db: Session, username: str):

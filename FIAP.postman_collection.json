@@ -1,0 +1,311 @@
+{
+	"info": {
+		"_postman_id": "6abf7382-094a-46fc-b7a1-666a4d042cdd",
+		"name": "FIAP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "16181191"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"joao.lima@fakemail.com\",\n    \"password\": \"12345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8123/api/v1/user/login/"
+					},
+					"response": []
+				},
+				{
+					"name": "User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8123/api/v1/user/",
+							"host": [
+								"localhost"
+							],
+							"port": "8123",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								""
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"joao.limaaaa11aw1s@fakemail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8123/api/v1/user/"
+					},
+					"response": []
+				},
+				{
+					"name": "User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"authentication\": {\n        \"email\": \"joao.lima@fakemail.com\",\n        \"password\": \"12345\"\n    },\n    \"to_update\": {\n        \"email\": \"mr..james@fakemail.com\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8123/api/v1/user/"
+					},
+					"response": []
+				},
+				{
+					"name": "User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"authentication\": {\n        \"email\": \"joao.lima@fakemail.com\",\n        \"password\": \"12345\"\n    },\n    \"to_update\": {\n        \"email\": \"nathan.wilson@fakemail.com\",\n        \"username\": \"charlim zika brabo 5\",\n        \"full_name\": \"Charles Doido Insane\",\n        \"password\": \"abcd11111\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8123/api/v1/user/"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8123/api/v1/tasks/",
+							"host": [
+								"localhost"
+							],
+							"port": "8123",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								""
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "status_id",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "task_id",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tasks",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"qq\",\n    \"description\": \"312312\",\n    \"status_id\": 2,\n    \"user_id\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8123/api/v1/tasks/",
+							"host": [
+								"localhost"
+							],
+							"port": "8123",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								""
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "status_id",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "task_id",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tasks",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8123/api/v1/tasks/?task_id=2",
+							"host": [
+								"localhost"
+							],
+							"port": "8123",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								""
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tasks",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": null,\n    \"description\": null,\n    \"user_id\": \"5\",\n    \"status_id\": \"2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8123/api/v1/tasks/?task_id=4",
+							"host": [
+								"localhost"
+							],
+							"port": "8123",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								""
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "4"
+								},
+								{
+									"key": "remove_user",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task Status",
+			"item": [
+				{
+					"name": "Tasks Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8123/api/v1/task-status/",
+							"host": [
+								"localhost"
+							],
+							"port": "8123",
+							"path": [
+								"api",
+								"v1",
+								"task-status",
+								""
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

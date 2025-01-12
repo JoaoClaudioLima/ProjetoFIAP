@@ -32,6 +32,7 @@ app.include_router(router=router, prefix=api_prefix, tags=["FIAP"])
 origins = [
     "http://localhost",
     "http://localhost:8080",
+    "http://localhost:3000",
     "http://localhost:8123",
     "http://example.com",
 ]

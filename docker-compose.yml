@@ -32,6 +32,16 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+  flower:
+    image: mher/flower
+    container_name: flower
+    environment:
+      CELERY_BROKER_URL: "pyamqp://guest:guest@rabbitmq:5672//"
+    ports:
+      - "5555:5555"
+    depends_on:
+      - rabbitmq
+
   celery_worker:
     build:
       context: .

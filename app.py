@@ -20,6 +20,7 @@ app = FastAPI(
     title="API projeto do board de tarefas - FIAP",
     description="API para o Board de Tarefa -> Melhorar descrição",
     version=Settings.VERSION,
+    docs_url=f"/apis/partner-docs",  # Adiciona o caminho do Swagger UI
     redoc_url=f"/apis/partner-redoc",
     openapi_url=f"/apis/partner/openapi.json",
 )

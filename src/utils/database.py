@@ -40,6 +40,14 @@ def get_from_db(model, db: Session, skip: int = 0, limit: int = 10):
     return db.query(model).offset(skip).all()
 
 
+def get_user_from_db(db: Session, email: str):
+    model = User
+    task = db.query(model).filter(model.email == email).first()
+    if not task:
+        raise HTTPException(400, "Usuário não encontrado")
+    return task.id
+
+
 def is_user_admin(db: Session, email: str):
     model = User
     return db.query(model).filter(model.email == email, model.deleted_at.is_(None), model.is_admin.is_(True)).first() is not None

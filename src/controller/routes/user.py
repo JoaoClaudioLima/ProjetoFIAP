@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from src.model.user_schemas import UserInput, UserUpdateInput, UserAuthentication
 from src.utils.database import get_db, authenticate_user, check_email_exists, check_user_privileges, \
-    check_username_availability
+    check_username_availability, get_user_from_db
 from src.utils.user import db_update_user, db_delete_user, db_read_user, db_create_user
 
 users_router = APIRouter()
@@ -14,7 +14,11 @@ users_router = APIRouter()
 @users_router.post("/user/login/", response_model=None, status_code=200)
 def login_user(user: UserAuthentication, db: Session = Depends(get_db)):
     authenticate_user(db, user.email, user.password)
-    return "OK"
+    data = get_user_from_db(db=db, email=user.email)
+    response = {
+        "user_id": data,
+    }
+    return response
 
 
 @users_router.post("/user/", response_model=None, status_code=201)

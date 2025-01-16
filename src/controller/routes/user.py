@@ -7,7 +7,7 @@ from src.model.user_schemas import UserInput, UserUpdateInput, UserAuthenticatio
 from src.utils.database import get_db, authenticate_user, check_email_exists, check_user_privileges, \
     check_username_availability
 from src.utils.user import db_update_user, db_delete_user, db_read_user, db_create_user
-from src.controller.user_celery import get_user_task 
+from src.controller.user_celery import get_user_task
 from celery.result import AsyncResult
 
 users_router = APIRouter()
@@ -34,25 +34,20 @@ def read_users(user_id: Optional[int] = Query(None, description="The ID of the u
 
 
 @users_router.get("/user/", response_model=None)
-async def read_user(user_id: int = Query(None, description="The ID of the user to retrieve")):
-    # Check if user_id is provided
-    if not user_id:
-        raise HTTPException(status_code=400, detail="User ID is required")
-    
-    # Trigger the Celery task
-    task = get_user_task.apply_async(args=[user_id])
+async def read_user(
+    user_id: Optional[int] = Query(None, description="The ID of the user to retrieve"),
+):
+    try:
+        task = get_user_task.apply_async(args=[user_id])
+        print("Oi3")
+        result = AsyncResult(task)
+        user_data = result.get(timeout=10)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro ao processar a tarefa: {str(e)}")
 
-    # Wait for the task to finish and get the result
-    result = AsyncResult(task.id)
+    if not user_data:
+        raise HTTPException(status_code=404, detail="Nenhum usuário encontrado")
 
-    # Block until the task is complete (with a timeout, if desired)
-    user_data = result.get(timeout=10)  # Adjust timeout as needed
-
-    # If the result is empty, raise an exception
-    if not user_data or len(user_data) == 0:
-        raise HTTPException(status_code=404, detail="No users found")
-
-    # Return the user data
     return user_data
 
 

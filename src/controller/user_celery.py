@@ -1,17 +1,24 @@
-from celery import Celery
-from src.utils.database import get_db  # Método que retorna uma sessão do banco
-from src.utils.user import db_read_user  # Função que faz a lógica de leitura do usuário no banco
+import json
+from typing import Optional
 
-# Importa a instância do Celery
+from celery import Celery
+from src.utils.database_async import SyncSessionLocal, db_read_user_sync
 from src.controller.celery_app import celery_app
+from sqlalchemy.orm import class_mapper
+
+def serialize_sqlalchemy_object(obj):
+    """
+    Serializa um objeto SQLAlchemy em um formato JSON serializável.
+    """
+    columns = [column.key for column in class_mapper(obj.__class__).columns]
+    return {key: getattr(obj, key) for key in columns}
 
 @celery_app.task(name="get_user_task")
-def get_user_task(user_id: int):
-    # Create a manual database session
-    db = get_db()
+def get_user_task(user_id: Optional[int] = None):
     try:
-        # Fetch user data
-        users = db_read_user(db, user_id=user_id)
-        return users
-    finally:
-        db.close()
+        with SyncSessionLocal() as db:  # Sessão síncrona
+            users = db_read_user_sync(db, user_id=user_id)  # Use a versão síncrona
+            serialized_users = [serialize_sqlalchemy_object(user) for user in users]
+            return serialized_users
+    except Exception as e:
+        return {"error": str(e)}

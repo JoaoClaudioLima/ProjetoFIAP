@@ -55,12 +55,17 @@ services:
   web:
     build:
       context: .
+      dockerfile: Dockerfile  # Ensure the correct Dockerfile is used
     ports:
       - "8123:8123"
     volumes:
       - .:/app
     environment:
       FLASK_ENV: development
+      PORT: 8123  # Pass the port explicitly if required by the app
+    depends_on:
+      - postgres
+      - rabbitmq
 
 volumes:
   postgres_data:

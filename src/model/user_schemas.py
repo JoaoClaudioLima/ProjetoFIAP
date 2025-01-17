@@ -6,9 +6,9 @@ from src.utils.database import *
 
 # CREATE class
 class UserInput(BaseModel):
-    '''
-    Class responsible for handling user input.
-    '''
+    """
+    Classe responsável pela criação do Usuário.
+    """
     username: StrictStr = Field(description="User username", example="joao.lima")
     email: StrictStr = Field(description="User email", example="j.lima@fakemail.com")
     full_name: StrictStr = Field(description="User full name", example="João Lima")
@@ -33,17 +33,17 @@ class UserInput(BaseModel):
 
 # DELETE and PUT classes
 class UserAuthentication(BaseModel):
-    '''
-    Class responsible for handling user authentication input.
-    '''
+    """
+    Classe responsável pela autenticação do Usuário.
+    """
     email: StrictStr = Field(description="User email", example="j.lima@fakemail.com")
     password: StrictStr = Field(description="User password", example="joao_lima_FAKE_password123!")
 
 
 class UserUpdate(BaseModel):
-    '''
-    Class responsible for handling user to update input.
-    '''
+    """
+    Classe responsável pela atualização do Usuário.
+    """
     username: StrictStr = Field(default=None, description="User username", example="joao.lima")
     email: StrictStr = Field(description="User email", example="j.lima@fakemail.com")
     full_name: StrictStr = Field(default=None, description="User full name", example="João Lima")
@@ -62,8 +62,8 @@ class UserUpdate(BaseModel):
 
 
 class UserUpdateInput(BaseModel):
-    '''
-    Class responsible for handling user input.
-    '''
+    """
+    Classe responsável pela atualização e autenticação do Usuário.
+    """
     authentication: UserAuthentication
     to_update: UserUpdate

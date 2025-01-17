@@ -48,11 +48,12 @@ Adicionalmente, é recomendada a utilização de uma das seguintes ferramentas: 
 ```bash
 # Acessar o diretório no seu terminal/cmd
 $ cd {diretório}
+```
 
+```bash
 # Clonar o repositório
 $ git clone https://github.com/JoaoClaudioLima/ProjetoFIAP.git
 ```
-
 #### Rodando o projeto
 
 ```bash
@@ -64,7 +65,6 @@ Uma vez que o container tenha sido criado, realizar um ping no servidor para se 
 
 ```http request
 http://localhost:8123/api/v1/health-check
-
 ```
 Response:
 ```code
@@ -79,8 +79,14 @@ Caso positivo, o serviço do back-end está pronto para ser utilizado! Segue doc
 - Descritivo de funcionamento do serviço (Redoc): http://localhost:8123/api/v1/partner-redoc
 - Descritivo de funcionamento do serviço (OpenAPI): http://localhost:8123/api/v1//api/v1/openapi.json
 - Visualização da database (pgAdmin): http://localhost:5050/login?next=/browser/
-  - user: **admin@example.com**
-  - password: **admin**
+  - Login no pgAdmin:
+    - user: **admin@example.com**
+    - password: **admin**
+  - Conectar na database:
+    - Host name/address: **postgres**
+    - Port: **5432**
+    - Username: **user**
+    - Password: **password**
 
 
 Diagrama de classes da database:

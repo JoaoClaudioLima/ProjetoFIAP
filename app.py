@@ -34,6 +34,8 @@ origins = [
     "http://localhost:8080",
     "http://localhost:3000",
     "http://localhost:8123",
+    "http://localhost:5432",
+    "http://localhost:5050",
     "http://example.com",
 ]
 

@@ -43,10 +43,10 @@ def db_read_task(
 
 def db_validate_task_input(task_input: Union[TaskInput, TaskUpdateInput], db: Session):
     if task_input.user_id and not check_user_exists(db, str(task_input.user_id)):
-        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+        raise HTTPException(status_code=400, detail="Usuário não encontrado.")
 
     if task_input.status_id and not check_task_status_exists(db, str(task_input.status_id)):
-        raise HTTPException(status_code=404, detail="Status da tarefa inválido")
+        raise HTTPException(status_code=400, detail="Status da tarefa inválido.")
 
 
 def db_create_task(task_input: TaskInput, db: Session):
@@ -85,6 +85,14 @@ def db_update_task(db: Session, task_input: TaskUpdateInput, task_id: str, remov
     if not task:
         return
 
+    if remove_user:
+        task.user_id = None
+        task.updated_at = datetime.utcnow()
+        db.commit()
+        db.refresh(task)
+
+        return task
+
     if new_title := task_input.title:
         task.title = new_title
 
@@ -96,9 +104,6 @@ def db_update_task(db: Session, task_input: TaskUpdateInput, task_id: str, remov
 
     if new_user_id := task_input.user_id:
         task.user_id = new_user_id
-
-    if remove_user:
-        task.user_id = None
 
     if not any([new_title, new_description, new_status_id, new_user_id]):
         return

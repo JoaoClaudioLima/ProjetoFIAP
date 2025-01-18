@@ -31,11 +31,19 @@ def check_username_availability(db: Session, username: str):
     model = User
     task = db.query(model).filter(model.username == username).first()
     if task is not None:
-        raise HTTPException(400, "Nome de usuário já existe")
+        raise HTTPException(400, "Nome de usuário já existe.")
 
 
-def get_from_db(model, db: Session, skip: int = 0, limit: int = 10):
+def get_from_db(model, db: Session, skip: int = 0):
     return db.query(model).offset(skip).all()
+
+
+def get_user_from_db(db: Session, email: str):
+    model = User
+    task = db.query(model).filter(model.email == email).first()
+    if not task:
+        raise HTTPException(400, "Usuário não encontrado.")
+    return task.id
 
 
 def is_user_admin(db: Session, email: str):
@@ -59,7 +67,7 @@ def check_authentication(db: Session, email: str, password: str) -> bool:
     model = User
     task = db.query(model).filter(model.email == email, model.deleted_at.is_(None)).first()
     if not task:
-        raise HTTPException(400, "Email ou senha incorretos")
+        raise HTTPException(400, "Email ou senha incorretos.")
     return check_password(password, task.hashed_password)
 
 
@@ -68,7 +76,7 @@ def validate_username_availability(username: str):
     db: Session = SessionLocal()
     try:
         if db.query(model).filter(model.username == username, model.deleted_at.is_(None)).first():
-            raise HTTPException(status_code=400, detail="Nome de usuário já está em uso")
+            raise HTTPException(status_code=400, detail="Nome de usuário já está em uso.")
     finally:
         db.close()
 
@@ -78,16 +86,16 @@ def validate_email_availability(email: str):
     db: Session = SessionLocal()
     try:
         if db.query(model).filter(model.email == email, model.deleted_at.is_(None)).first():
-            raise HTTPException(status_code=400, detail="Email já está em uso")
+            raise HTTPException(status_code=400, detail="Email já está em uso.")
     finally:
         db.close()
 
 
 def authenticate_user(db: Session, authentication_email: str, password: str):
     if not check_authentication(db, email=authentication_email, password=password):
-        raise HTTPException(status_code=400, detail="Email ou senha incorretos")
+        raise HTTPException(status_code=400, detail="Email ou senha incorretos.")
 
 
 def check_user_privileges(db: Session, authentication_email: str, to_update_email: str):
     if not (is_user_admin(db, authentication_email) or check_email(authentication_email, to_update_email)):
-        raise HTTPException(status_code=400, detail="Usuário sem privilégios para executar essa ação")
+        raise HTTPException(status_code=400, detail="Usuário sem privilégios para executar essa ação.")

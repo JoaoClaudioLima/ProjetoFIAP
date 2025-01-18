@@ -17,17 +17,16 @@ command.downgrade(alembic_cfg, "base")
 command.upgrade(alembic_cfg, "head")
 
 app = FastAPI(
-    title="API projeto do board de tarefas - FIAP",
-    description="API para o Board de Tarefa -> Melhorar descrição",
+    title="FIAP - MBA Engenharia de Software - Trabalho final de avaliação de Engineering Software Development",
+    description="Esta API permite a gestão de um board de tarefas, incluindo funcionalidades para criar, ler, atualizar e deletar usuários e tarefas, além de verificar o status das tarefas e realizar um check de saúde do serviço.",
     version=Settings.VERSION,
-    docs_url=f"/apis/partner-docs",  # Adiciona o caminho do Swagger UI
-    redoc_url=f"/apis/partner-redoc",
-    openapi_url=f"/apis/partner/openapi.json",
+    redoc_url=f"/api/v1/partner-redoc",
+    openapi_url=f"/api/v1/openapi.json",
 )
 
 api_prefix = "/api/v1"
 
-app.include_router(router=router, prefix=api_prefix, tags=["FIAP"])
+app.include_router(router=router, prefix=api_prefix)
 
 
 origins = [
@@ -35,6 +34,8 @@ origins = [
     "http://localhost:8080",
     "http://localhost:3000",
     "http://localhost:8123",
+    "http://localhost:5432",
+    "http://localhost:5050",
     "http://example.com",
 ]
 

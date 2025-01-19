@@ -43,14 +43,14 @@ Este projeto tem como objetivo a construção de uma ferramenta de administraç�
 ****
 
 ### Instalação
-Antes de começar, será necessário instalar a seguintes ferramentas: [Git](https://git-scm.com) e [Docker](https://www.docker.com/).
+Antes de começar, será necessário instalar as seguintes ferramentas: [Git](https://git-scm.com) e [Docker](https://www.docker.com/).
 
 Adicionalmente, é recomendada a utilização de uma das seguintes ferramentas: [VSCode](https://code.visualstudio.com/) ou [PyCharm](https://www.jetbrains.com/pt-br/pycharm/).
 
 #### Clonando o repositório
 
 ```bash
-# Acessar o diretório no seu terminal/cmd
+# Acessar o diretório no seu terminal/cmd para onde o projeto será clonado
 cd {diretório}
 ```
 
@@ -59,9 +59,12 @@ cd {diretório}
 git clone https://github.com/JoaoClaudioLima/ProjetoFIAP.git
 ```
 #### Rodando o projeto
-
 ```bash
-# No terminal, executar:
+# Acessar a pasta do repositório
+cd ProjetoFIAP
+```
+```bash
+# No terminal, executar
 docker-compose up -d --build
 ```
 

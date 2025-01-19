@@ -23,6 +23,10 @@ Este projeto tem como objetivo a construção de uma ferramenta de administraç�
 - [x] Deleção de um usuário;
 - [x] Atualização de um usuário.
 
+#### Usuários Async
+- [x] Leitura dos dados de todos os usuários válidos de forma assíncrona;
+- [x] Leitura dos dados de um usuário de forma assíncrona;
+
 #### Status de tarefas
 
 - [x] Leitura de todos os status de tarefa disponíveis.
@@ -47,18 +51,18 @@ Adicionalmente, é recomendada a utilização de uma das seguintes ferramentas: 
 
 ```bash
 # Acessar o diretório no seu terminal/cmd
-$ cd {diretório}
+cd {diretório}
 ```
 
 ```bash
 # Clonar o repositório
-$ git clone https://github.com/JoaoClaudioLima/ProjetoFIAP.git
+git clone https://github.com/JoaoClaudioLima/ProjetoFIAP.git
 ```
 #### Rodando o projeto
 
 ```bash
 # No terminal, executar:
-$ docker-compose up -d
+docker-compose up -d --build
 ```
 
 Uma vez que o container tenha sido criado, realizar um ping no servidor para se certificar que não houve nenhum erro na sua inicialização.
@@ -88,6 +92,11 @@ Caso positivo, o serviço do back-end está pronto para ser utilizado! Segue doc
     - Username: **user**
     - Password: **password**
 
+Para validar que a database foi criada corretamente, utilizar o QueryTool do pgAdmin:
+
+```bash
+SELECT * FROM public.users;
+```
 
 Diagrama de classes da database:
 
@@ -145,3 +154,7 @@ As tecnologias a seguir foram escolhidas para garantir um desenvolvimento ágil,
 - [x] **SQLAlchemy**: Biblioteca de ORM (Object-Relational Mapping) para Python, que facilita a interação com bancos de dados relacionais de forma mais intuitiva e eficiente.
 - [x] **Alembic**: Ferramenta de migração de banco de dados para SQLAlchemy, que permite gerenciar mudanças no esquema do banco de dados de forma organizada e controlada.
 - [x] **Docker**: Plataforma de containers que facilita a criação, implantação e execução de aplicações em ambientes isolados, garantindo consistência e portabilidade entre diferentes ambientes de desenvolvimento e produção.
+- [x] **RabbitMQ**: Sistema de mensageria robusto que permite comunicação assíncrona entre diferentes componentes da aplicação, garantindo alta performance e confiabilidade no processamento de mensagens.
+- [x] **Celery**: Biblioteca para execução de tarefas assíncronas e agendamento de jobs, utilizada para lidar com operações de longa duração ou de alta carga de processamento de forma eficiente.
+- [x] **Flower**: Ferramenta de monitoramento e administração de tarefas Celery, que fornece uma interface gráfica para rastrear e gerenciar o desempenho das tarefas assíncronas.
+

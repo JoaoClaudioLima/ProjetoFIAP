@@ -170,6 +170,7 @@ def delete_user(user: UserUpdateInput, db: Session = Depends(get_db)):
         - **email**: Email do usuário, deve ser único. (string)
         - **password**: Senha do usuário. (string)
 
+    Quando o usuário for deletado ele será removido do board de tarefas. Caso possua alguma tarefa atribuída, esta ficará sem responsável.
     """
     authenticate_user(db, user.authentication.email, user.authentication.password)
     check_user_privileges(db, user.authentication.email, user.to_update.email)

@@ -8,10 +8,9 @@ from src.utils.database import get_db, authenticate_user, check_email_exists, ch
     check_username_availability, get_user_from_db
 from src.utils.user import db_update_user, db_delete_user, db_read_user, db_create_user
 
-users_router = APIRouter()
+v1_users_router = APIRouter()
 
-
-@users_router.post("/user/login/", response_model=None, status_code=200,
+@v1_users_router.post("/user/login/", response_model=None, status_code=200,
                    responses={
                        200: {
                            "description": "Successful Response",
@@ -51,7 +50,7 @@ def login_user(user: UserAuthentication, db: Session = Depends(get_db)):
     return response
 
 
-@users_router.post("/user/", response_model=None, status_code=201,
+@v1_users_router.post("/user/", response_model=None, status_code=201,
                    responses={
                        201: {
                            "description": "Successful Response",
@@ -87,7 +86,7 @@ def create_user(user: UserInput, db: Session = Depends(get_db)):
     return "Usuário criado."
 
 
-@users_router.get("/user/", response_model=None,
+@v1_users_router.get("/user/", response_model=None,
                   responses={
                       200: {
                           "description": "Successful Response",
@@ -133,7 +132,7 @@ def read_user(user_id: Optional[int] = Query(None,
     return task
 
 
-@users_router.delete("/user/", response_model=None, status_code=200,
+@v1_users_router.delete("/user/", response_model=None, status_code=200,
                      responses={
                          200: {
                              "description": "Successful Response",
@@ -181,7 +180,7 @@ def delete_user(user: UserUpdateInput, db: Session = Depends(get_db)):
     return "Usuário deletado."
 
 
-@users_router.put("/user/", response_model=None,
+@v1_users_router.put("/user/", response_model=None,
                   responses={
                       200: {
                           "description": "Successful Response",

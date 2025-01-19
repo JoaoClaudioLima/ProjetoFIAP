@@ -5,14 +5,12 @@ from src.controller.database import SessionLocal
 from src.model.database import User, TaskStatus
 from src.utils.miscelaneous import verify_password
 
-
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
-
 
 def check_email_exists(db: Session, email: str):
     model = User

@@ -84,7 +84,7 @@ Caso positivo, o serviço do back-end está pronto para ser utilizado! Segue doc
 
 - Descritivo de funcionamento do serviço (Swagger): http://localhost:8123/docs#/
 - Descritivo de funcionamento do serviço (Redoc): http://localhost:8123/api/v1/partner-redoc
-- Descritivo de funcionamento do serviço (OpenAPI): http://localhost:8123/api/v1//api/v1/openapi.json
+- Descritivo de funcionamento do serviço (OpenAPI): http://localhost:8123/api/v1/openapi.json
 - Visualização da database (pgAdmin): http://localhost:5050/login?next=/browser/
   - Login no pgAdmin:
     - user: **admin@example.com**

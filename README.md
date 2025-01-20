@@ -95,6 +95,7 @@ Caso positivo, o serviço do back-end está pronto para ser utilizado! Segue doc
     - Username: **user**
     - Password: **password**
 - Vizualização de tarefas do serviço assíncrono (Flower + RabbitMQ): http://localhost:5555/tasks
+
 Para validar que a database foi criada corretamente, utilizar o QueryTool do pgAdmin:
 
 ```bash

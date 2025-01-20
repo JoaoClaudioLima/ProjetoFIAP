@@ -94,7 +94,7 @@ Caso positivo, o serviço do back-end está pronto para ser utilizado! Segue doc
     - Port: **5432**
     - Username: **user**
     - Password: **password**
-
+- Vizualização de tarefas do serviço assíncrono (Flower + RabbitMQ): http://localhost:5555/tasks
 Para validar que a database foi criada corretamente, utilizar o QueryTool do pgAdmin:
 
 ```bash
@@ -160,4 +160,3 @@ As tecnologias a seguir foram escolhidas para garantir um desenvolvimento ágil,
 - [x] **RabbitMQ**: Sistema de mensageria robusto que permite comunicação assíncrona entre diferentes componentes da aplicação, garantindo alta performance e confiabilidade no processamento de mensagens.
 - [x] **Celery**: Biblioteca para execução de tarefas assíncronas e agendamento de jobs, utilizada para lidar com operações de longa duração ou de alta carga de processamento de forma eficiente.
 - [x] **Flower**: Ferramenta de monitoramento e administração de tarefas Celery, que fornece uma interface gráfica para rastrear e gerenciar o desempenho das tarefas assíncronas.
-
